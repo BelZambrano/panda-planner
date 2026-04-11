@@ -47,7 +47,7 @@ Ejemplo:
 
 1. Clonar el repositorio:
 
-git clone https://github.com/TU-USUARIO/panda-planner.git  
+git clone (https://github.com/BelZambrano/panda-planner)
 cd panda-planner  
 
 2. Crear entorno virtual:

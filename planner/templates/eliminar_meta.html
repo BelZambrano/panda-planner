@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Eliminar meta</h2>
+<p>¿Seguro que quieres eliminar esta meta?</p>
+
+<div class="form-card">
+    <p><strong>{{ meta.titulo }}</strong></p>
+
+    {% if meta.descripcion %}
+        <p>{{ meta.descripcion }}</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn-danger">Sí, eliminar</button>
+            <a href="{% url 'metas' %}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

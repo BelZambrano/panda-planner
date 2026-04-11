@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Mis metas</h2>
+<p>Pequeños pasos, pero con dirección 💜</p>
+
+<div class="actions-bar">
+    <a href="{% url 'nueva_meta' %}" class="btn-main">+ Nueva meta</a>
+</div>
+
+{% if metas %}
+    <div class="metas-grid">
+        {% for meta in metas %}
+            <div class="meta-card">
+
+                <div class="meta-header">
+                    <input type="checkbox" {% if meta.completada %}checked{% endif %} disabled>
+                    <h3>{{ meta.titulo }}</h3>
+                </div>
+
+                {% if meta.descripcion %}
+                    <p class="meta-desc">{{ meta.descripcion }}</p>
+                {% endif %}
+
+                <div class="meta-actions">
+    <a href="{% url 'editar_meta' meta.id %}" class="btn-cute edit">
+        ✿ Editar
+    </a>
+    <a href="{% url 'eliminar_meta' meta.id %}" class="btn-cute delete">
+        ♡ Eliminar
+    </a>
+</div>
+
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No tienes metas registradas todavía.</p>
+{% endif %}
+
+{% endblock %}

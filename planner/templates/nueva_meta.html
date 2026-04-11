@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Nueva meta</h2>
+<p>Agrega una meta nueva a tu Panda Planner ✨</p>
+
+<div class="form-card">
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="{{ form.titulo.id_for_label }}">Título</label>
+            {{ form.titulo }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.descripcion.id_for_label }}">Descripción</label>
+            {{ form.descripcion }}
+        </div>
+
+        <div class="form-group checkbox-group">
+            {{ form.completada }}
+            <label for="{{ form.completada.id_for_label }}">¿Ya está completada?</label>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-action">Guardar meta</button>
+            <a href="{% url 'metas' %}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

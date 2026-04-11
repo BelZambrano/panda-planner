@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PandaPlanner</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="background-deco"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1>🐼 PandaPlanner</h1>
+            <p class="subtitle">Tu rincón cute para organizar tu vida</p>
+        </header>
+
+        <nav class="nav">
+            <a href="/">Inicio</a>
+            <a href="/habitos/">Hábitos</a>
+            <a href="/metas/">Metas</a>
+            <a href="/sobre/">Sobre</a>
+        </nav>
+
+        <main class="content">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+</body>
+</html>

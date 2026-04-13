@@ -1,18 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Meta
-from .forms import MetaForm
+from .models import Meta, Habito
+from .forms import MetaForm, HabitoForm
 
 
 def home(request):
     return render(request, "home.html")
 
 
-def habitos(request):
-    return render(request, "habitos.html")
+def sobre(request):
+    return render(request, "sobre.html")
+
+
+# --------------------
+# METAS
+# --------------------
 
 
 def metas(request):
-    metas = Meta.objects.all().order_by("-fecha_creacion")
+    metas = Meta.objects.all().order_by("completada", "-fecha_creacion")
     return render(request, "metas.html", {"metas": metas})
 
 
@@ -49,8 +54,64 @@ def eliminar_meta(request, meta_id):
         meta.delete()
         return redirect("metas")
 
-    return render(request, "eliminar_meta.html", {"meta": meta})
+    return redirect("metas")
 
 
-def sobre(request):
-    return render(request, "sobre.html")
+def toggle_meta(request, meta_id):
+    meta = get_object_or_404(Meta, id=meta_id)
+    meta.completada = not meta.completada
+    meta.save()
+    return redirect("metas")
+
+
+# --------------------
+# HÁBITOS
+# --------------------
+
+
+def habitos(request):
+    habitos = Habito.objects.all().order_by("completado", "-fecha_creacion")
+    return render(request, "habitos.html", {"habitos": habitos})
+
+
+def nuevo_habito(request):
+    if request.method == "POST":
+        form = HabitoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("habitos")
+    else:
+        form = HabitoForm()
+
+    return render(request, "nueva_habito.html", {"form": form})
+
+
+def editar_habito(request, habito_id):
+    habito = get_object_or_404(Habito, id=habito_id)
+
+    if request.method == "POST":
+        form = HabitoForm(request.POST, instance=habito)
+        if form.is_valid():
+            form.save()
+            return redirect("habitos")
+    else:
+        form = HabitoForm(instance=habito)
+
+    return render(request, "editar_habito.html", {"form": form, "habito": habito})
+
+
+def eliminar_habito(request, habito_id):
+    habito = get_object_or_404(Habito, id=habito_id)
+
+    if request.method == "POST":
+        habito.delete()
+        return redirect("habitos")
+
+    return redirect("habitos")
+
+
+def toggle_habito(request, habito_id):
+    habito = get_object_or_404(Habito, id=habito_id)
+    habito.completado = not habito.completado
+    habito.save()
+    return redirect("habitos")

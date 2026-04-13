@@ -2,16 +2,105 @@
 
 {% block content %}
 
-<h2>Mis hábitos</h2>
-<p>Marca lo que lograste hoy ✨</p>
+<section class="page-header">
+    <h2>Mis hábitos</h2>
+    <p>Pequeñas acciones repetidas que construyen grandes cambios ✨</p>
 
-<ul class="check-list">
-    <li><input type="checkbox"> Estudiar programación</li>
-    <li><input type="checkbox"> Tomar suficiente agua</li>
-    <li><input type="checkbox"> Hacer ejercicio suave</li>
-    <li><input type="checkbox"> Dormir mejor</li>
-</ul>
+    <div class="actions-bar">
+        <a href="{% url 'nuevo_habito' %}" class="btn-main">+ Nuevo hábito</a>
+    </div>
+</section>
 
-<p class="footer-note">Por ahora los checks son visuales y no se guardan todavía.</p>
+{% if habitos %}
+    <section class="items-grid">
+        {% for habito in habitos %}
+            <article class="item-card {% if habito.completado %}completed{% endif %}">
+                <div class="item-header">
+                    <form method="post" action="{% url 'toggle_habito' habito.id %}" class="item-check-form">
+                        {% csrf_token %}
+                        <input
+                            type="checkbox"
+                            class="item-checkbox"
+                            onchange="this.form.submit()"
+                            {% if habito.completado %}checked{% endif %}
+                        >
+                    </form>
+
+                    <div class="item-content">
+                        <h3>{{ habito.nombre }}</h3>
+
+                        {% if habito.descripcion %}
+                            <p class="item-desc">{{ habito.descripcion }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="item-actions">
+                    <a href="{% url 'editar_habito' habito.id %}" class="btn-cute edit">✿ Editar</a>
+
+                    <button
+                        type="button"
+                        class="btn-cute delete open-delete-modal"
+                        data-delete-url="{% url 'eliminar_habito' habito.id %}"
+                        data-item-name="{{ habito.nombre }}"
+                        data-item-type="habito"
+                    >
+                        ♡ Eliminar
+                    </button>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="empty-state">
+        <p>No tienes hábitos registrados todavía.</p>
+    </section>
+{% endif %}
+
+<div id="deleteModal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <h3>Eliminar hábito</h3>
+        <p id="deleteModalText">¿Seguro que quieres eliminar este hábito?</p>
+
+        <form id="deleteModalForm" method="post">
+            {% csrf_token %}
+            <div class="modal-actions">
+                <button type="submit" class="btn-danger">Sí, eliminar</button>
+                <button type="button" class="btn-secondary" id="closeDeleteModal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("deleteModal");
+    const modalText = document.getElementById("deleteModalText");
+    const modalForm = document.getElementById("deleteModalForm");
+    const closeBtn = document.getElementById("closeDeleteModal");
+    const openButtons = document.querySelectorAll(".open-delete-modal");
+
+    openButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            const deleteUrl = this.dataset.deleteUrl;
+            const itemName = this.dataset.itemName;
+
+            modalForm.action = deleteUrl;
+            modalText.textContent = `¿Seguro que quieres eliminar el hábito "${itemName}"?`;
+            modal.classList.remove("hidden");
+        });
+    });
+
+    closeBtn.addEventListener("click", function () {
+        modal.classList.add("hidden");
+    });
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.classList.add("hidden");
+        }
+    });
+});
+</script>
 
 {% endblock %}

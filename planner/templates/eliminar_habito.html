@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page-header">
+    <h2>Eliminar hábito</h2>
+    <p>¿Seguro que quieres eliminar este hábito?</p>
+</section>
+
+<section class="form-card">
+    <div class="meta-preview">
+        <h3>{{ habito.nombre }}</h3>
+
+        {% if habito.descripcion %}
+            <p>{{ habito.descripcion }}</p>
+        {% endif %}
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn-danger">Sí, eliminar</button>
+            <a href="{% url 'habitos' %}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

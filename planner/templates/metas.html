@@ -2,41 +2,111 @@
 
 {% block content %}
 
-<h2>Mis metas</h2>
-<p>Pequeños pasos, pero con dirección 💜</p>
+<section class="page-header">
+    <h2>Mis metas</h2>
+    <p>Pequeños pasos, pero con dirección 💜</p>
 
-<div class="actions-bar">
-    <a href="{% url 'nueva_meta' %}" class="btn-main">+ Nueva meta</a>
-</div>
+    <div class="actions-bar">
+        <a href="{% url 'nueva_meta' %}" class="btn-main">+ Nueva meta</a>
+    </div>
+</section>
 
 {% if metas %}
-    <div class="metas-grid">
+    <section class="items-grid">
         {% for meta in metas %}
-            <div class="meta-card">
+            <article class="item-card {% if meta.completada %}completed{% endif %}">
+                <div class="item-header">
+                    <form method="post" action="{% url 'toggle_meta' meta.id %}" class="item-check-form">
+                        {% csrf_token %}
+                        <input
+                            type="checkbox"
+                            class="item-checkbox"
+                            onchange="this.form.submit()"
+                            {% if meta.completada %}checked{% endif %}
+                        >
+                    </form>
 
-                <div class="meta-header">
-                    <input type="checkbox" {% if meta.completada %}checked{% endif %} disabled>
-                    <h3>{{ meta.titulo }}</h3>
+                    <div class="item-content">
+                        <h3>{{ meta.titulo }}</h3>
+
+                        {% if meta.descripcion %}
+                            <p class="item-desc">{{ meta.descripcion }}</p>
+                        {% endif %}
+
+                        {% if meta.completada and meta.fecha_completada %}
+                            <p class="item-date">
+                                Completada el {{ meta.fecha_completada|date:"d/m/Y H:i" }}
+                            </p>
+                        {% endif %}
+                    </div>
                 </div>
 
-                {% if meta.descripcion %}
-                    <p class="meta-desc">{{ meta.descripcion }}</p>
-                {% endif %}
+                <div class="item-actions">
+                    <a href="{% url 'editar_meta' meta.id %}" class="btn-cute edit">✿ Editar</a>
 
-                <div class="meta-actions">
-    <a href="{% url 'editar_meta' meta.id %}" class="btn-cute edit">
-        ✿ Editar
-    </a>
-    <a href="{% url 'eliminar_meta' meta.id %}" class="btn-cute delete">
-        ♡ Eliminar
-    </a>
+                    <button
+                        type="button"
+                        class="btn-cute delete open-delete-modal"
+                        data-delete-url="{% url 'eliminar_meta' meta.id %}"
+                        data-item-name="{{ meta.titulo }}"
+                        data-item-type="meta"
+                    >
+                        ♡ Eliminar
+                    </button>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% else %}
+    <section class="empty-state">
+        <p>No tienes metas registradas todavía.</p>
+    </section>
+{% endif %}
+
+<div id="deleteModal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <h3>Eliminar meta</h3>
+        <p id="deleteModalText">¿Seguro que quieres eliminar esta meta?</p>
+
+        <form id="deleteModalForm" method="post">
+            {% csrf_token %}
+            <div class="modal-actions">
+                <button type="submit" class="btn-danger">Sí, eliminar</button>
+                <button type="button" class="btn-secondary" id="closeDeleteModal">Cancelar</button>
+            </div>
+        </form>
+    </div>
 </div>
 
-            </div>
-        {% endfor %}
-    </div>
-{% else %}
-    <p>No tienes metas registradas todavía.</p>
-{% endif %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("deleteModal");
+    const modalText = document.getElementById("deleteModalText");
+    const modalForm = document.getElementById("deleteModalForm");
+    const closeBtn = document.getElementById("closeDeleteModal");
+    const openButtons = document.querySelectorAll(".open-delete-modal");
+
+    openButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            const deleteUrl = this.dataset.deleteUrl;
+            const itemName = this.dataset.itemName;
+
+            modalForm.action = deleteUrl;
+            modalText.textContent = `¿Seguro que quieres eliminar la meta "${itemName}"?`;
+            modal.classList.remove("hidden");
+        });
+    });
+
+    closeBtn.addEventListener("click", function () {
+        modal.classList.add("hidden");
+    });
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.classList.add("hidden");
+        }
+    });
+});
+</script>
 
 {% endblock %}

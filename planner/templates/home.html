@@ -8,27 +8,33 @@
 </section>
 
 <section class="dashboard">
+    <a href="{% url 'metas' %}?estado=pendientes" class="card-link">
+        <article class="dashboard-card card-home">
+            <h3>Metas pendientes</h3>
+            <p>{{ metas_pendientes }}</p>
+        </article>
+    </a>
 
-    <div class="dashboard-card">
-        <h3>Metas pendientes</h3>
-        <p>{{ metas_pendientes }}</p>
-    </div>
+    <a href="{% url 'metas' %}?estado=completadas" class="card-link">
+        <article class="dashboard-card card-home">
+            <h3>Metas completadas</h3>
+            <p>{{ metas_completadas }}</p>
+        </article>
+    </a>
 
-    <div class="dashboard-card">
-        <h3>Metas completadas</h3>
-        <p>{{ metas_completadas }}</p>
-    </div>
-
-    <div class="dashboard-card">
-        <h3>Hábitos activos</h3>
-        <p>{{ total_habitos }}</p>
-    </div>
-
+    <a href="{% url 'habitos' %}?estado=activos" class="card-link">
+        <article class="dashboard-card card-home">
+            <h3>Hábitos activos</h3>
+            <p>{{ habitos_activos }}</p>
+        </article>
+    </a>
 </section>
 
 <section class="dashboard-message">
-    {% if metas_pendientes > 0 %}
-        <p>Hoy tienes {{ metas_pendientes }} meta(s) por avanzar 💪</p>
+    {% if metas_pendientes == 1 %}
+        <p>Hoy tienes 1 meta por avanzar 💪</p>
+    {% elif metas_pendientes > 1 %}
+        <p>Hoy tienes {{ metas_pendientes }} metas por avanzar 💪</p>
     {% else %}
         <p>¡Vas increíble! No tienes metas pendientes 🎉</p>
     {% endif %}

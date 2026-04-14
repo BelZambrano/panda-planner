@@ -9,6 +9,23 @@
     <div class="actions-bar">
         <a href="{% url 'nuevo_habito' %}" class="btn-main">+ Nuevo hábito</a>
     </div>
+
+    <div class="filter-bar">
+        <a href="{% url 'habitos' %}?estado=todos"
+           class="filter-chip {% if estado_actual == 'todos' %}active{% endif %}">
+            Todos
+        </a>
+
+        <a href="{% url 'habitos' %}?estado=activos"
+           class="filter-chip {% if estado_actual == 'activos' %}active{% endif %}">
+            Activos
+        </a>
+
+        <a href="{% url 'habitos' %}?estado=completados"
+           class="filter-chip {% if estado_actual == 'completados' %}active{% endif %}">
+            Completados
+        </a>
+    </div>
 </section>
 
 {% if habitos %}
@@ -43,7 +60,6 @@
                         class="btn-cute delete open-delete-modal"
                         data-delete-url="{% url 'eliminar_habito' habito.id %}"
                         data-item-name="{{ habito.nombre }}"
-                        data-item-type="habito"
                     >
                         ♡ Eliminar
                     </button>
@@ -53,7 +69,7 @@
     </section>
 {% else %}
     <section class="empty-state">
-        <p>No tienes hábitos registrados todavía.</p>
+        <p>No hay hábitos para este filtro.</p>
     </section>
 {% endif %}
 

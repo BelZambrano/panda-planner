@@ -9,6 +9,23 @@
     <div class="actions-bar">
         <a href="{% url 'nueva_meta' %}" class="btn-main">+ Nueva meta</a>
     </div>
+
+    <div class="filter-bar">
+        <a href="{% url 'metas' %}?estado=todas"
+           class="filter-chip {% if estado_actual == 'todas' %}active{% endif %}">
+            Todas
+        </a>
+
+        <a href="{% url 'metas' %}?estado=pendientes"
+           class="filter-chip {% if estado_actual == 'pendientes' %}active{% endif %}">
+            Pendientes
+        </a>
+
+        <a href="{% url 'metas' %}?estado=completadas"
+           class="filter-chip {% if estado_actual == 'completadas' %}active{% endif %}">
+            Completadas
+        </a>
+    </div>
 </section>
 
 {% if metas %}
@@ -49,7 +66,6 @@
                         class="btn-cute delete open-delete-modal"
                         data-delete-url="{% url 'eliminar_meta' meta.id %}"
                         data-item-name="{{ meta.titulo }}"
-                        data-item-type="meta"
                     >
                         ♡ Eliminar
                     </button>
@@ -59,7 +75,7 @@
     </section>
 {% else %}
     <section class="empty-state">
-        <p>No tienes metas registradas todavía.</p>
+        <p>No hay metas para este filtro.</p>
     </section>
 {% endif %}
 

@@ -6,12 +6,12 @@ from .forms import MetaForm, HabitoForm
 def home(request):
     metas_pendientes = Meta.objects.filter(completada=False).count()
     metas_completadas = Meta.objects.filter(completada=True).count()
-    total_habitos = Habito.objects.count()
+    habitos_activos = Habito.objects.filter(completado=False).count()
 
     context = {
         "metas_pendientes": metas_pendientes,
         "metas_completadas": metas_completadas,
-        "total_habitos": total_habitos,
+        "habitos_activos": habitos_activos,
     }
 
     return render(request, "home.html", context)
@@ -27,8 +27,25 @@ def sobre(request):
 
 
 def metas(request):
-    metas = Meta.objects.all().order_by("completada", "-fecha_creacion")
-    return render(request, "metas.html", {"metas": metas})
+    estado = request.GET.get("estado", "todas")
+
+    metas = Meta.objects.all()
+
+    if estado == "pendientes":
+        metas = metas.filter(completada=False).order_by("-fecha_creacion")
+    elif estado == "completadas":
+        metas = metas.filter(completada=True).order_by(
+            "-fecha_completada", "-fecha_creacion"
+        )
+    else:
+        metas = metas.order_by("completada", "-fecha_creacion")
+
+    context = {
+        "metas": metas,
+        "estado_actual": estado,
+    }
+
+    return render(request, "metas.html", context)
 
 
 def nueva_meta(request):
@@ -80,8 +97,23 @@ def toggle_meta(request, meta_id):
 
 
 def habitos(request):
-    habitos = Habito.objects.all().order_by("completado", "-fecha_creacion")
-    return render(request, "habitos.html", {"habitos": habitos})
+    estado = request.GET.get("estado", "todos")
+
+    habitos = Habito.objects.all()
+
+    if estado == "activos":
+        habitos = habitos.filter(completado=False).order_by("-fecha_creacion")
+    elif estado == "completados":
+        habitos = habitos.filter(completado=True).order_by("-fecha_creacion")
+    else:
+        habitos = habitos.order_by("completado", "-fecha_creacion")
+
+    context = {
+        "habitos": habitos,
+        "estado_actual": estado,
+    }
+
+    return render(request, "habitos.html", context)
 
 
 def nuevo_habito(request):

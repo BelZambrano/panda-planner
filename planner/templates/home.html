@@ -2,32 +2,36 @@
 
 {% block content %}
 
-<div class="hero-box">
-    <span class="badge">Organiza tu día con calma</span>
-    <h2>Bienvenida a PandaPlanner</h2>
-    <p>
-        Una app suave, simple y cute para ordenar tus hábitos, metas y pendientes
-        sin sentirte colapsada.
-    </p>
-</div>
+<section class="page-header">
+    <h2>Bienvenida a tu Panda Planner 🐼</h2>
+    <p>Organiza tu vida con calma, intención y estilo 💜</p>
+</section>
 
-<div class="card-grid">
-    <div class="card">
-        <h3>🌷 Hábitos</h3>
-        <p>Haz seguimiento de tus rutinas importantes y celebra tus pequeños avances.</p>
+<section class="dashboard">
+
+    <div class="dashboard-card">
+        <h3>Metas pendientes</h3>
+        <p>{{ metas_pendientes }}</p>
     </div>
 
-    <div class="card">
-        <h3>🎯 Metas</h3>
-        <p>Define objetivos realistas y visualiza en qué quieres enfocarte esta semana.</p>
+    <div class="dashboard-card">
+        <h3>Metas completadas</h3>
+        <p>{{ metas_completadas }}</p>
     </div>
 
-    <div class="card">
-        <h3>📝 Tareas</h3>
-        <p>Ordena pendientes para que tu cabeza no tenga que cargar con todo a la vez.</p>
+    <div class="dashboard-card">
+        <h3>Hábitos activos</h3>
+        <p>{{ total_habitos }}</p>
     </div>
-</div>
 
-<p class="footer-note">PandaPlanner fue creado con Django para practicar vistas, templates y archivos estáticos.</p>
+</section>
+
+<section class="dashboard-message">
+    {% if metas_pendientes > 0 %}
+        <p>Hoy tienes {{ metas_pendientes }} meta(s) por avanzar 💪</p>
+    {% else %}
+        <p>¡Vas increíble! No tienes metas pendientes 🎉</p>
+    {% endif %}
+</section>
 
 {% endblock %}

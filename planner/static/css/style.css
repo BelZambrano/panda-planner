@@ -440,3 +440,40 @@ body {
         font-size: 1.5rem;
     }
 }
+
+.dashboard {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.dashboard-card {
+    background: #fff4f8;
+    border-radius: 20px;
+    padding: 20px;
+    width: 180px;
+    text-align: center;
+    box-shadow: 0 6px 14px rgba(120, 84, 112, 0.08);
+}
+
+.dashboard-card h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #8a4d75;
+}
+
+.dashboard-card p {
+    margin-top: 10px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #6d3f63;
+}
+
+.dashboard-message {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 1.1rem;
+    color: #7a6679;
+}

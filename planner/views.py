@@ -4,7 +4,17 @@ from .forms import MetaForm, HabitoForm
 
 
 def home(request):
-    return render(request, "home.html")
+    metas_pendientes = Meta.objects.filter(completada=False).count()
+    metas_completadas = Meta.objects.filter(completada=True).count()
+    total_habitos = Habito.objects.count()
+
+    context = {
+        "metas_pendientes": metas_pendientes,
+        "metas_completadas": metas_completadas,
+        "total_habitos": total_habitos,
+    }
+
+    return render(request, "home.html", context)
 
 
 def sobre(request):

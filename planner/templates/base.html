@@ -1,32 +1,89 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PandaPlanner</title>
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
+
     <div class="background-deco"></div>
 
     <div class="container">
+
+        <!-- Header -->
         <header class="header">
+
             <h1>🐼 PandaPlanner</h1>
-            <p class="subtitle">Tu rincón cute para organizar tu vida</p>
+
+            <p class="subtitle">
+                Tu rincón cute para organizar tu vida
+            </p>
+
+            {% if user.is_authenticated %}
+
+            <div class="user-info">
+
+                🌸 Bienvenida <strong>{{ user.username }}</strong>
+
+                |
+
+                <a href="{% url 'logout' %}">
+                    Cerrar sesión
+                </a>
+
+            </div>
+
+            {% else %}
+
+            <div class="user-info">
+
+                <a href="{% url 'login' %}">
+                    Iniciar sesión
+                </a>
+
+            </div>
+
+            {% endif %}
+
         </header>
 
+
+        <!-- Navegación -->
         <nav class="nav">
+
             <a href="/">Inicio</a>
-            <a href="/habitos/">Hábitos</a>
-            <a href="/metas/">Metas</a>
-            <a href="/sobre/">Sobre</a>
+
+            <a href="/habitos/">
+                Hábitos
+            </a>
+
+            <a href="/metas/">
+                Metas
+            </a>
+
+            <a href="/sobre/">
+                Sobre
+            </a>
+
         </nav>
 
+
+        <!-- Contenido -->
         <main class="content">
+
             {% block content %}
             {% endblock %}
+
         </main>
+
     </div>
+
 </body>
+
 </html>
